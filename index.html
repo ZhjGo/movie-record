@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO基础标签 -->
+    <title>我的年度观影清单 - 在线电影记录工具 | 生成个人观影总结图片</title>
+    <meta name="description" content="免费在线电影观影清单工具，记录你的年度观影历程。包含2016-2025年热门电影数据库，一键生成精美的个人观影总结图片，支持分享到社交媒体。">
+    <meta name="keywords" content="观影清单,电影记录,年度总结,电影推荐,观影统计,电影数据库,个人观影,电影分享,观影图片生成">
+    <meta name="author" content="观影清单">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://movie.jkai.de/">
+    <meta property="og:title" content="我的年度观影清单 - 在线电影记录工具">
+    <meta property="og:description" content="免费在线电影观影清单工具，记录你的年度观影历程，一键生成精美的个人观影总结图片。">
+    <meta property="og:image" content="https://movie.jkai.de/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="我的年度观影清单">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://movie.jkai.de/">
+    <meta property="twitter:title" content="我的年度观影清单 - 在线电影记录工具">
+    <meta property="twitter:description" content="免费在线电影观影清单工具，记录你的年度观影历程，一键生成精美的个人观影总结图片。">
+    <meta property="twitter:image" content="https://movie.jkai.de/og-image.jpg">
+    
+    <!-- 移动端优化 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="观影清单">
+    <meta name="theme-color" content="#E50914">
+    <meta name="msapplication-TileColor" content="#E50914">
+    
+    <!-- 图标 -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- 预连接和预加载 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://code.jquery.com">
+    <link rel="preconnect" href="https://html2canvas.hertzen.com">
+    
+    <!-- DNS预解析 -->
+    <link rel="dns-prefetch" href="//api.sampleapis.com">
+    <link rel="dns-prefetch" href="//www.omdbapi.com">
+    
+    <!-- 字体加载优化 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "我的年度观影清单",
+        "description": "免费在线电影观影清单工具，记录你的年度观影历程，一键生成精美的个人观影总结图片。",
+        "url": "https://movie.jkai.de/",
+        "applicationCategory": "Entertainment",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CNY"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "观影清单"
+        },
+        "datePublished": "2025-01-01",
+        "dateModified": "2025-07-04",
+        "inLanguage": "zh-CN",
+        "isAccessibleForFree": true,
+        "keywords": "观影清单,电影记录,年度总结,电影推荐",
+        "screenshot": "https://movie.jkai.de/screenshot.jpg"
+    }
+    </script>
+    
+    <!-- 加载外部脚本 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        /* --- 全局样式 --- */
+        :root {
+            --bg-color: #141414;
+            --card-bg: #242424;
+            --text-color: #e5e5e5;
+            --primary-color: #E50914;
+            --border-color: #303030;
+            --selected-color: #4CAF50;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- 头部 --- */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin: 0;
+        }
+        .header p {
+            font-size: 1rem;
+            color: #aaa;
+        }
+
+        /* --- 电影列表 --- */
+        .movie-table {
+            width: 100%;
+            max-width: 1200px;
+            border-collapse: collapse;
+        }
+        .year-row {
+            display: flex;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .year-label {
+            flex: 0 0 80px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .movies-grid {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+        }
+        .movie-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+        }
+        .movie-item:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        .movie-item.selected {
+            background-color: var(--selected-color);
+            color: white;
+            font-weight: bold;
+            border-color: var(--selected-color);
+        }
+
+        /* --- 生成按钮 --- */
+        .generate-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+            transition: background-color 0.2s;
+        }
+        .generate-button:hover {
+            background-color: #f6121d;
+        }
+
+        /* --- 生成图片的模板 (隐藏) --- */
+        #image-template {
+            display: none; /* 默认隐藏，生成时才显示 */
+            position: absolute;
+            left: -9999px; /* 移出屏幕外 */
+            width: 800px;
+            background-color: #1d1d1d;
+            padding: 40px;
+            border: 10px solid var(--primary-color);
+            box-sizing: border-box;
+        }
+        #image-template .template-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #image-template .template-header h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+        }
+        #image-template .template-header p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+        #image-template .template-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        #image-template .template-item {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        #image-template .template-footer {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* --- 图片预览弹窗 --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+        }
+        #preview-image {
+            max-width: 90vw;
+            max-height: 70vh;
+            border: 2px solid var(--border-color);
+        }
+        .modal-actions {
+            margin-top: 20px;
+        }
+        .download-btn, .close-btn {
+            background-color: var(--selected-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 1rem;
+        }
+        .close-btn {
+            background-color: #666;
+        }
+        
+        /* --- SEO和可访问性优化 --- */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: #aaa;
+            margin: 10px 0;
+        }
+        
+        .status-info {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 10px;
+        }
+        
+        .footer-note {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .action-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        /* --- 页脚样式 --- */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* --- 响应式优化 --- */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 6px;
+            }
+            
+            .movie-item {
+                font-size: 0.8rem;
+                padding: 8px;
+                min-height: 35px;
+            }
+            
+            .year-label {
+                flex: 0 0 60px;
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 4px;
+            }
+            
+            .movie-item {
+                font-size: 0.7rem;
+                padding: 6px;
+                min-height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>我的年度观影清单</h1>
+        <p>点击选择你看过的电影，然后生成你的年度总结图片！</p>
+        <p id="data-status" style="font-size: 0.9rem; color: #888; margin-top: 10px;">
+            📡 正在加载电影数据库...
+        </p>
+    </div>
+
+    <div id="movie-list-container" class="movie-table">
+        <!-- 电影列表将由JS动态生成在这里 -->
+    </div>
+
+    <button id="generate-btn" class="generate-button">生成我的观影图片</button>
+
+    <!-- 用于生成图片的隐藏模板 -->
+    <div id="image-template">
+        <div class="template-header">
+            <h2 id="template-title">我的2023年观影总结</h2>
+            <p id="template-count">共观看了 0 部电影</p>
+        </div>
+        <div id="template-grid" class="template-grid">
+            <!-- 选中的电影将在这里生成 -->
+        </div>
+        <div class="template-footer">
+            <p>由「我的年度观影清单」生成</p>
+        </div>
+    </div>
+    
+    <!-- 图片预览弹窗 -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <h3>图片已生成！</h3>
+            <img id="preview-image" src="" alt="生成的图片">
+            <div class="modal-actions">
+                <a id="download-link" class="download-btn" href="#" download="my-movie-list-2023.png">下载图片</a>
+                <button id="close-modal-btn" class="close-btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 我的年度观影清单 | 免费在线电影记录工具</p>
+            <p class="tech-info">
+                支持2016-<span id="current-year-footer">2025</span>年电影数据 |
+                已收录<span id="total-movies-footer">120+</span>部精选电影
+            </p>
+            <p class="footer-note">
+                本工具完全在浏览器本地运行，不收集任何个人信息
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 更新页脚年份
+        document.getElementById('current-year-footer').textContent = new Date().getFullYear();
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            // --- 动态生成年份和电影数据 ---
+            const currentYear = new Date().getFullYear();
+            const startYear = 2016; // 起始年份
+            
+            // 初始化电影数据对象
+            let movieData = {};
+            
+            // 为每个年份生成默认数据
+            for (let year = startYear; year <= currentYear; year++) {
+                movieData[year.toString()] = [];
+            }
+            
+            // 设置基础电影数据
+            const baseMovieData = {
+                "2024": ["沙丘2", "疯狂的麦克斯：狂暴女神", "头脑特工队2", "哥斯拉大战金刚2", "九龙城寨之围城", "年会不能停！", "热辣滚烫", "飞驰人生2"],
+                "2023": ["奥本海默", "芭比", "蜘蛛侠：纵横宇宙", "流浪地球2", "满江红", "封神第一部", "长安三万里", "星愿"],
+                "2022": ["瞬息全宇宙", "阿凡达：水之道", "新蝙蝠侠", "壮志凌云2：独行侠", "子弹列车", "独行月球", "人生大事", "西线无战事"],
+                "2021": ["沙丘", "蜘蛛侠：英雄无归", "007：无暇赴死", "你好，李焕英", "长津湖", "失控玩家", "送你一朵小红花"],
+                "2020": ["信条", "心灵奇旅", "八佰", "神奇女侠1984", "姜子牙", "我和我的家乡", "拆弹专家2", "一秒钟"],
+            };
+            
+            // 如果是当前年份，添加一些预期的电影
+            if (currentYear === 2025) {
+                baseMovieData["2025"] = ["超人：传承", "神奇四侠：初次步骤", "雷神5", "蜘蛛侠4", "阿凡达3：种子的承载者", "速度与激情11"];
+            }
+            
+            // 合并基础数据
+            movieData = { ...movieData, ...baseMovieData };
+
+            // --- 免费电影数据API (无需密钥) ---
+            
+            // 方案1: 使用OMDb API的免费版本 (每日1000次请求)
+            async function fetchFromOMDbFree() {
+                try {
+                    // 使用一些知名电影的IMDb ID获取数据
+                    const movieIds = ['tt0111161', 'tt0068646', 'tt0071562', 'tt0468569', 'tt0050083'];
+                    const movies = [];
+                    
+                    for (const id of movieIds.slice(0, 3)) { // 限制请求数量
+                        try {
+                            const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=trilogy`);
+                            const data = await response.json();
+                            if (data.Response === 'True') {
+                                movies.push(data.Title);
+                            }
+                        } catch (error) {
+                            console.log(`获取电影 ${id} 失败:`, error);
+                        }
+                    }
+                    
+                    return movies.length > 0 ? movies : null;
+                } catch (error) {
+                    console.log('OMDb API不可用:', error);
+                    return null;
+                }
+            }
+            
+            // 方案2: 使用内置的丰富电影数据库 (动态生成到当前年份)
+            function getEnhancedMovieDatabase() {
+                const enhancedData = {
+                    "2024": [
+                        "沙丘2", "疯狂的麦克斯：狂暴女神", "头脑特工队2", "哥斯拉大战金刚2",
+                        "九龙城寨之围城", "年会不能停！", "热辣滚烫", "飞驰人生2",
+                        "第二十条", "我们一起摇太阳", "维和防暴队", "草木人间", "周处除三害", "功夫熊猫4"
+                    ],
+                    "2023": [
+                        "奥本海默", "芭比", "蜘蛛侠：纵横宇宙", "流浪地球2",
+                        "满江红", "封神第一部", "长安三万里", "星愿",
+                        "深海", "中国乒乓之绝地反击", "无名", "狂飙", "消失的她", "孤注一掷"
+                    ],
+                    "2022": [
+                        "瞬息全宇宙", "阿凡达：水之道", "新蝙蝠侠", "壮志凌云2：独行侠",
+                        "子弹列车", "独行月球", "人生大事", "西线无战事",
+                        "神奇动物：邓布利多之谜", "雷神4：爱与雷电", "黑豹2", "小黄人大眼萌：神偷奶爸前传"
+                    ],
+                    "2021": [
+                        "沙丘", "蜘蛛侠：英雄无归", "007：无暇赴死", "你好，李焕英",
+                        "长津湖", "失控玩家", "送你一朵小红花", "我的姐姐",
+                        "速度与激情9", "黑寡妇", "永恒族", "尚气与十环传奇", "扬名立万", "爱情神话"
+                    ],
+                    "2020": [
+                        "信条", "心灵奇旅", "八佰", "神奇女侠1984",
+                        "姜子牙", "我和我的家乡", "拆弹专家2", "一秒钟",
+                        "花木兰", "黑寡妇", "速度与激情：特别行动", "1917", "小妇人", "寄生虫"
+                    ],
+                    "2019": [
+                        "复仇者联盟4：终局之战", "狮子王", "冰雪奇缘2", "蜘蛛侠：英雄远征",
+                        "哪吒之魔童降世", "流浪地球", "我和我的祖国", "中国机长",
+                        "小丑", "1917", "寄生虫", "好莱坞往事", "少年的你", "白蛇：缘起"
+                    ],
+                    "2018": [
+                        "黑豹", "复仇者联盟3：无限战争", "超人总动员2", "侏罗纪世界2",
+                        "我不是药神", "西虹市首富", "红海行动", "唐人街探案2",
+                        "毒液", "海王", "神奇动物：格林德沃之罪", "蚁人2：黄蜂女现身", "一出好戏", "邪不压正"
+                    ],
+                    "2017": [
+                        "星球大战8：最后的绝地武士", "美女与野兽", "速度与激情8", "蜘蛛侠：英雄归来",
+                        "战狼2", "羞羞的铁拳", "芳华", "前任3：再见前任",
+                        "神奇女侠", "银河护卫队2", "雷神3：诸神黄昏", "正义联盟", "寻梦环游记", "敦刻尔克"
+                    ],
+                    "2016": [
+                        "美国队长3：内战", "海底总动员2", "星球大战外传：侠盗一号", "奇异博士",
+                        "美人鱼", "湄公河行动", "我不是潘金莲", "大鱼海棠",
+                        "疯狂动物城", "死侍", "X战警：天启", "自杀小队", "爱乐之城", "血战钢锯岭"
+                    ]
+                };
+                
+                // 如果当前年份是2025年，添加2025年的电影
+                if (currentYear === 2025) {
+                    enhancedData["2025"] = [
+                        "超人：传承", "神奇四侠：初次步骤", "雷神5", "蜘蛛侠4",
+                        "阿凡达3：种子的承载者", "速度与激情11", "碟中谍8", "侏罗纪世界4",
+                        "黑豹3", "奇异博士3", "银河护卫队4", "复仇者联盟5", "X战警重启", "死侍3"
+                    ];
+                }
+                
+                // 如果当前年份超过2025年，为未来年份生成占位电影
+                if (currentYear > 2025) {
+                    for (let year = 2025; year <= currentYear; year++) {
+                        if (!enhancedData[year.toString()]) {
+                            enhancedData[year.toString()] = [
+                                `${year}年热门电影1`, `${year}年热门电影2`, `${year}年热门电影3`,
+                                `${year}年热门电影4`, `${year}年热门电影5`, `${year}年热门电影6`,
+                                `${year}年热门电影7`, `${year}年热门电影8`, `${year}年热门电影9`,
+                                `${year}年热门电影10`, `${year}年热门电影11`, `${year}年热门电影12`
+                            ];
+                        }
+                    }
+                }
+                
+                return enhancedData;
+            }
+            
+            // 方案3: 从公开的电影数据源获取 (可选增强)
+            async function fetchFromPublicAPI() {
+                try {
+                    // 尝试获取一些额外的电影数据作为补充
+                    const response = await fetch('https://api.sampleapis.com/movies/drama');
+                    const data = await response.json();
+                    
+                    if (data && Array.isArray(data)) {
+                        // 将获取的电影按年份分类
+                        const moviesByYear = {};
+                        data.slice(0, 20).forEach(movie => {
+                            if (movie.year && movie.title) {
+                                const year = movie.year.toString();
+                                if (year >= startYear.toString() && year <= currentYear.toString()) {
+                                    if (!moviesByYear[year]) {
+                                        moviesByYear[year] = [];
+                                    }
+                                    if (moviesByYear[year].length < 3) { // 每年最多添加3部
+                                        moviesByYear[year].push(movie.title);
+                                    }
+                                }
+                            }
+                        });
+                        return Object.keys(moviesByYear).length > 0 ? moviesByYear : null;
+                    }
+                    return null;
+                } catch (error) {
+                    console.log('公开API不可用:', error);
+                    return null;
+                }
+            }
+            
+            // 智能数据加载 - 尝试多个数据源
+            async function loadEnhancedMovieData() {
+                console.log(`🎬 正在加载增强电影数据 (${startYear}-${currentYear})...`);
+                
+                // 更新状态显示
+                $('#data-status').text(`📡 正在加载电影数据库 (${startYear}-${currentYear})...`);
+                
+                // 首先使用内置的丰富数据库
+                try {
+                    const enhancedData = getEnhancedMovieDatabase();
+                    // 合并数据，保留现有数据并添加新数据
+                    Object.keys(enhancedData).forEach(year => {
+                        if (movieData[year]) {
+                            // 合并数组并去重
+                            const combined = [...movieData[year], ...enhancedData[year]];
+                            movieData[year] = [...new Set(combined)];
+                        } else {
+                            movieData[year] = enhancedData[year];
+                        }
+                    });
+                    console.log(`✅ 已加载增强电影数据库 (覆盖${Object.keys(enhancedData).length}个年份)`);
+                    
+                    // 计算总电影数量
+                    const totalMovies = Object.values(movieData).reduce((sum, movies) => sum + movies.length, 0);
+                    $('#data-status').text(`✅ 已加载电影数据库 (${startYear}-${currentYear}年，共${totalMovies}部电影)`);
+                    
+                    renderMovieList();
+                } catch (error) {
+                    console.log('❌ 增强数据加载失败:', error);
+                    $('#data-status').text('❌ 数据加载失败，使用基础数据');
+                }
+                
+                // 尝试从公开API获取额外数据
+                try {
+                    const publicData = await fetchFromPublicAPI();
+                    if (publicData) {
+                        // 合并API数据
+                        Object.keys(publicData).forEach(year => {
+                            if (movieData[year]) {
+                                const combined = [...movieData[year], ...publicData[year]];
+                                movieData[year] = [...new Set(combined)];
+                            } else {
+                                movieData[year] = publicData[year];
+                            }
+                        });
+                        console.log('✅ 已从公开API加载额外数据');
+                        
+                        // 重新计算总数
+                        const totalMovies = Object.values(movieData).reduce((sum, movies) => sum + movies.length, 0);
+                        $('#data-status').text(`🎬 电影数据库已增强 (${startYear}-${currentYear}年，共${totalMovies}部电影)`);
+                        
+                        renderMovieList();
+                    }
+                } catch (error) {
+                    console.log('⚠️ 公开API数据加载失败:', error);
+                }
+                
+                console.log(`🎭 电影数据加载完成，当前年份范围: ${startYear}-${currentYear}`);
+            }
+
+            // --- 动态生成电影列表 ---
+            function renderMovieList() {
+                const container = $('#movie-list-container');
+                container.empty(); // 清空现有内容
+                
+                // 获取年份并按从新到旧排序
+                const years = Object.keys(movieData).sort((a, b) => parseInt(b) - parseInt(a));
+                
+                years.forEach(year => {
+                    // 只显示有电影的年份
+                    if (movieData[year] && movieData[year].length > 0) {
+                        let yearRow = $('<div class="year-row"></div>');
+                        let yearLabel = $(`<div class="year-label">${year}</div>`);
+                        let moviesGrid = $('<div class="movies-grid"></div>');
+
+                        movieData[year].forEach(movie => {
+                            let movieItem = $(`<div class="movie-item" data-year="${year}">${movie}</div>`);
+                            moviesGrid.append(movieItem);
+                        });
+
+                        yearRow.append(yearLabel).append(moviesGrid);
+                        container.append(yearRow);
+                    }
+                });
+                
+                // 重新绑定点击事件
+                $('.movie-item').off('click').on('click', function() {
+                    $(this).toggleClass('selected');
+                });
+            }
+            
+            // 初始渲染
+            renderMovieList();
+            
+            // 自动加载增强数据
+            loadEnhancedMovieData();
+
+            // --- 点击生成图片按钮 ---
+            $('#generate-btn').on('click', function() {
+                const selectedMovies = [];
+                $('.movie-item.selected').each(function() {
+                    selectedMovies.push($(this).text());
+                });
+
+                if (selectedMovies.length === 0) {
+                    alert('请至少选择一部电影！');
+                    return;
+                }
+
+                // 准备图片模板
+                const templateGrid = $('#template-grid');
+                templateGrid.empty(); // 清空旧内容
+
+                selectedMovies.forEach(movie => {
+                    templateGrid.append(`<div class="template-item">${movie}</div>`);
+                });
+                
+                // 更新标题和数量
+                const currentYear = new Date().getFullYear(); // 或者你可以让用户选择年份
+                $('#template-title').text(`我的${currentYear}观影总结`);
+                $('#template-count').text(`共观看了 ${selectedMovies.length} 部佳片`);
+
+                // 使用html2canvas生成图片
+                const templateElement = document.getElementById('image-template');
+                $(templateElement).css('display', 'block'); // 临时显示以便截图
+
+                html2canvas(templateElement, {
+                    scale: 2, // 提高图片清晰度
+                    backgroundColor: null, // 使用元素的背景色
+                    useCORS: true // 如果图片来自外部，需要这个
+                }).then(canvas => {
+                    const imageUrl = canvas.toDataURL('image/png');
+                    
+                    // 显示弹窗
+                    $('#preview-image').attr('src', imageUrl);
+                    $('#download-link').attr('href', imageUrl);
+                    $('#download-link').attr('download', `my-movie-list-${currentYear}.png`);
+                    $('#preview-modal').css('display', 'flex');
+
+                    $(templateElement).css('display', 'none'); // 截图后重新隐藏
+                });
+            });
+            
+            // --- 关闭弹窗 ---
+            $('#close-modal-btn').on('click', function() {
+                $('#preview-modal').css('display', 'none');
+            });
+        });
+    </script>
+
+</body>
+</html>
